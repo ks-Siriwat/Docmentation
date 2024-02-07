@@ -1,0 +1,20 @@
+/* 2626. Array Reduce Transformation LeetCode Challenge(Easy) */
+
+// input
+nums = []
+fn = function sum(accum, curr) { return 0; }
+init = 25
+
+var reduce = function (nums, fn, init, index = 0) {
+    let accu = fn(init, nums[index]);
+    // console.log(accu);
+    if (index >= nums.length) {
+        return init;
+    }
+    return reduce(nums, fn, accu, index + 1);
+
+};
+
+let results = reduce(nums, fn, init);
+
+console.log(`The final answer is ${results}.`);
