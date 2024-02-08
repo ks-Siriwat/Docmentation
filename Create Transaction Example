@@ -1,0 +1,80 @@
+/*****************************************************************************
+                Example Code Create Transaction by using PnP js
+*****************************************************************************/
+
+function convertDate(_date) {
+    if (_date == null) {
+        return {
+            isoDate: null,
+            displayDate: null
+        }
+    }
+    var current_data_date;
+    if (String(_date).split('').includes('/')) {
+        let dateParts = _date.split('/'); // Split the string into day, month, and year
+        let day = parseInt(dateParts[0], 10);
+        let month = parseInt(dateParts[1], 10) - 1; // Subtract 1 from the month because months are 0-indexed in JavaScript
+        let year = parseInt(dateParts[2], 10);
+
+        current_data_date = new Date(year, month, day);
+    } else {
+        current_data_date = new Date(_date);
+    }
+
+    pad = function (num) {
+        return (num < 10 ? '0' : '') + num;
+    };
+    if (current_data_date == null) {
+        let date = new Date()
+        return date.toIsoString();
+    }
+
+    return {
+        isoDate: current_data_date.getFullYear() +
+            '-' + pad(current_data_date.getMonth() + 1) +
+            '-' + pad(current_data_date.getDate()) +
+            'T' + '00' +
+            ':' + '00' +
+            ':' + '00' +
+            '.' + '000Z',
+        displayDate: pad(current_data_date.getDate()) +
+            '/' + pad(current_data_date.getMonth() + 1) +
+            '/' + current_data_date.getFullYear()
+    }
+}
+
+async function doCreateTransaction(listName, payload = {}) {
+    const res = await pnp.sp.web.lists.getByTitle(listName).items.add(payload);
+    return res;
+};
+
+async function main() {
+    // xx
+    if (xx != xxx && (xxx != '' && xxx != null)) {
+        const xx_payload = {
+            xx: convertDate('31/12/2023').isoDate,
+            xxId: 1, // xxLookupId
+            xx: '001 C',
+            xx: 'xx', // xx
+            xx: 'xxx, // xx
+            xxId: xx // StaffName
+        }
+        await doCreateTransaction('xx', xx_payload);
+    }
+
+    // xx
+    if (xx.Id !== null) {
+        const xx_payload = {
+            xx: convertDate('31/12/2023').isoDate,
+            xxId: 1,
+            xx: 'xx x',
+            xx: 'xx xxx',
+            xxId: 1,
+            xx: 'Remark'
+        }
+        await doCreateTransaction('xx', xx_payload);
+    }
+    return 0;
+}
+
+main();
