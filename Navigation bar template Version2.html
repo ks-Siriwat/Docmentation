@@ -1,0 +1,384 @@
+<nav class="navbar">
+    <div class="app-name">Application Name</div>
+    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
+    <ul class="nav" role="menubar">
+        <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a></li>
+        <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#about">About</a></li>
+        <li class="dropdown" role="none">
+            <a href="#" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Services ▾</a>
+            <div class="dropdown-menu">
+                <a href="#" class="nav-link" data-target="#service1">Service 1</a>
+                <a href="#" class="nav-link" data-target="#service2">Service 2</a>
+            </div>
+        </li>
+        <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#contact">Contact</a></li>
+    </ul>
+    <div class="username signout" role="menuitem">{{Chanisa Patrawanpirom}}</div>
+</nav>
+
+<!-- jQuery (CDN) and behavior script -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
+<script
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery.SPServices/2013.01/jquery.SPServices-2013.01.min.js"></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('.username').text(_spPageContextInfo.userDisplayName);
+    });
+
+    $(function () {
+        // Toggle dropdown menu visibility
+        $('.dropdown-toggle').on('click', function (e) {
+            e.preventDefault();
+            var menu = $(this).siblings('.dropdown-menu');
+            $('.dropdown-menu').not(menu).hide();
+            menu.toggle();
+        });
+
+        // Mobile nav toggle
+        $('.nav-toggle').on('click', function (e) {
+            e.preventDefault();
+            var nav = $('.nav');
+            var expanded = $(this).attr('aria-expanded') === 'true';
+            if (expanded) {
+                nav.removeClass('open');
+                $(this).attr('aria-expanded', 'false');
+            } else {
+                nav.addClass('open');
+                $(this).attr('aria-expanded', 'true');
+            }
+        });
+
+        // Show/hide content sections when nav links are clicked (no navigation)
+        $('.nav-link').on('click', function (e) {
+            e.preventDefault();
+            var raw = $(this).data('target');
+            if (!raw) return;
+            // Allow multiple selectors separated by commas (preserves spaces inside complex selectors)
+            var targets = String(raw).split(',').map(function (s) { return s.trim(); }).filter(function (s) { return s; });
+            if (targets.length === 0) return;
+
+            // If all targets are visible, hide them; otherwise hide others and show the requested targets
+            var allVisible = true;
+            $.each(targets, function (i, sel) {
+                if (!$(sel).is(':visible')) { return false; }
+            });
+
+            $('.content-section').hide(); // hide all sections
+            $.each(targets, function (i, sel) { $(sel).show(); });
+
+            // Close any open dropdown menus after selection
+            $('.dropdown-menu').hide();
+            // On mobile, hide the nav after selecting a link
+            if ($('.nav-toggle').is(':visible')) {
+                $('.nav').removeClass('open');
+                $('.nav-toggle').attr('aria-expanded', 'false');
+            }
+        });
+
+        // Clicking outside closes any open dropdown
+        $(document).on('click', function (e) {
+            if (!$(e.target).closest('.dropdown').length) $('.dropdown-menu').hide();
+        });
+
+        $('.signout').on('click', function (e) {
+            e.preventDefault();
+            window.open('https://spapp3.nawarat.co.th/_layouts/15/SignOut.aspx');
+        });
+    });
+</script>
+
+<style>
+    /* Webpart Component ID มาแก้ตรงนี้ */
+    #MSOZoneCell_WebPartWPQ7 {
+        top: 0;
+        position: sticky;
+        z-index: 1100;
+        height: auto;
+    }
+
+    /* Mobile / responsive styles */
+    .nav-toggle {
+        display: none;
+        background: transparent;
+        border: 0;
+        color: white;
+        font-size: 22px;
+        padding: 8px 12px;
+        cursor: pointer;
+    }
+
+    /* ถ้า menu มัน overlap ก็มา adjust max-width ตรงนี้ */
+    @media (max-width: 1180px) {
+        .navbar {
+            padding: 8px 12px;
+        }
+
+        .nav-toggle {
+            display: block;
+        }
+
+        .nav {
+            display: none !important;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: dodgerblue;
+            flex-direction: column;
+            gap: 0;
+            z-index: 200;
+        }
+
+        .nav.open {
+            display: flex !important;
+            position: absolute;
+            top: 100%;
+            /* directly under the navbar */
+            max-height: calc(100vh - 56px);
+            overflow-y: auto;
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        }
+
+        /* Thin, subtle scrollbars for mobile menu (WebKit + Firefox) */
+        .nav.open {
+            scrollbar-width: thin;
+            /* Firefox */
+            scrollbar-color: rgba(255, 255, 255, 0.28) rgba(255, 255, 255, 0.04);
+        }
+
+        .nav.open::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .nav.open::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 8px;
+        }
+
+        .nav.open::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.28);
+            border-radius: 8px;
+        }
+
+        .nav.open::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Also style dropdown scrollbars if they ever overflow */
+        .dropdown-menu {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.03);
+
+            position: absolute;
+            box-shadow: none;
+            border-radius: 0;
+
+            width: 100%;
+            position: absolute !important;
+            box-shadow: none !important;
+            border-radius: 0 !important;
+        }
+
+        .dropdown-menu::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 8px;
+        }
+
+        .dropdown-menu::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.18);
+            border-radius: 8px;
+        }
+
+        .dropdown-menu a {
+            padding-left: 28px;
+        }
+
+        .nav li {
+            width: 100%;
+        }
+
+        .nav a {
+            padding: 12px 16px;
+        }
+
+        .app-name {
+            max-width: 24ch !important;
+            position: absolute;
+            left: 40%;
+            transform: translateX(-65%);
+            margin-right: 0 !important;
+        }
+
+        .username {
+            max-width: 50ch;
+        }
+    }
+
+    .navbar {
+        background: dodgerblue;
+        color: white;
+        padding: 10px 16px;
+        display: flex;
+        align-items: center;
+        position: sticky;
+        /* make navbar stick to top */
+        top: 0;
+        z-index: 300;
+    }
+
+    .app-name {
+        color: white;
+        font-weight: 700;
+        margin: 0 10px;
+
+        /* Collapse long username with ellipsis */
+        max-width: 10ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: middle;
+        flex-shrink: 0;
+        /* prevent shrinking below max-width */
+    }
+
+    .username {
+        color: white;
+        font-weight: 700;
+        margin-left: auto;
+
+        /* Collapse long username with ellipsis */
+        max-width: 20ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        display: inline-block;
+        vertical-align: middle;
+    }
+
+    .nav {
+        scrollbar-width: thin;
+        /* Firefox */
+        scrollbar-color: rgba(255, 255, 255, 0.24) rgba(255, 255, 255, 0.04);
+
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        gap: 12px;
+        flex: 1 1 auto;
+        /* allow nav to take available space between app-name and username */
+        min-width: 0;
+        /* prevent items from overflowing/overlapping by allowing horizontal scroll */
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .nav::-webkit-scrollbar {
+        height: 8px;
+    }
+
+    .nav::-webkit-scrollbar-track {
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 8px;
+    }
+
+    .nav::-webkit-scrollbar-thumb {
+        background: rgba(255, 255, 255, 0.22);
+        border-radius: 8px;
+    }
+
+    .nav::-webkit-scrollbar-thumb:hover {
+        background: rgba(255, 255, 255, 0.36);
+    }
+
+    .nav li {
+        position: relative;
+    }
+
+    .nav a {
+        color: white;
+        text-decoration: none;
+        padding: 8px 10px;
+        display: inline-block;
+        white-space: nowrap;
+        /* keep items on one line and enable horizontal scroll when needed */
+    }
+
+    .nav a:hover {
+        background: rgba(255, 255, 255, 0.08);
+        border-radius: 4px;
+    }
+
+    .nav-link {
+        max-width: 20ch;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* Dropdown menu: secondary white background, text primary color */
+    .dropdown-menu {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        min-width: 160px;
+        background: white;
+        color: dodgerblue;
+        box-shadow: 0 6px 12px rgba(0, 0, 0, 0.12);
+        border-radius: 4px;
+        padding: 4px 0;
+        z-index: 10000;
+    }
+
+    .dropdown-menu a {
+        color: dodgerblue;
+        display: block;
+        padding: 8px 12px;
+        text-decoration: none;
+    }
+
+    .dropdown-menu a:hover {
+        background: rgba(0, 0, 0, 0.04);
+    }
+
+    /* Content sections for show/hide demo */
+    .container {
+        padding: 16px;
+    }
+
+    .content-section {
+        display: none;
+        padding: 12px;
+        background: #f7f7f7;
+        border: 1px solid #e0e0e0;
+        border-radius: 6px;
+    }
+
+    .signout {
+        cursor: pointer;
+    }
+
+    .signout[role="menuitem"] {
+        padding: 8px 10px;
+        border-radius: 4px;
+    }
+
+    .signout[role="menuitem"]:hover {
+        background: rgba(255, 255, 255, 0.08);
+        color: white;
+        text-decoration: none;
+        display: inline-block;
+        white-space: nowrap;
+    }
+</style>
