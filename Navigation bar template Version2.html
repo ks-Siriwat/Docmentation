@@ -1,19 +1,72 @@
 <nav class="navbar">
-    <div class="app-name">Application Name</div>
-    <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation"><i class="fa fa-bars"></i></button>
-    <ul class="nav" role="menubar">
-        <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a></li>
-        <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#about">About</a></li>
-        <li class="dropdown" role="none">
-            <a href="#" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Services ▾</a>
-            <div class="dropdown-menu">
-                <a href="#" class="nav-link" data-target="#service1">Service 1</a>
-                <a href="#" class="nav-link" data-target="#service2">Service 2</a>
-            </div>
-        </li>
-        <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#contact">Contact</a></li>
-    </ul>
-    <div class="username signout" role="menuitem">{{Chanisa Patrawanpirom}}</div>
+    <div class="nav-left">
+        <div class="app-name">Application Name</div>
+        <button class="nav-toggle" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fa fa-bars"></i>
+        </button>
+    </div>
+    <div class="nav-center">
+        <div class="scroll-wrap">
+            <ul class="nav scroll-x" role="menubar">
+                <li role="none" class="current-section"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#home, #about">Home</a>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#about">About</a></li>
+                <li class="dropdown" role="none">
+                    <a href="#" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">Services ▾</a>
+                    <div class="dropdown-menu">
+                        <a href="#" class="nav-link" data-target="#service1">Service 1</a>
+                        <a href="#" class="nav-link" data-target="#service2">Service 2</a>
+                    </div>
+                </li>
+                <li role="none"><a href="#" role="menuitem" class="nav-link" data-target="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="nav-right">
+        <div class="username signout" role="menuitem">{{Chanisa Patrawanpirom}}</div>
+    </div>
 </nav>
 
 <!-- jQuery (CDN) and behavior script -->
@@ -26,7 +79,28 @@
 <script type="text/javascript">
 
     $(document).ready(function () {
-        $('.username').text(_spPageContextInfo.userDisplayName);
+        // $('.username').text(_spPageContextInfo.userDisplayName);
+
+        const wrap = document.querySelector('.scroll-wrap');
+        const scroller = wrap.querySelector('.scroll-x');
+
+        function updateScrollHints() {
+            const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+
+            wrap.classList.toggle(
+                'can-scroll-left',
+                scroller.scrollLeft > 1
+            );
+
+            wrap.classList.toggle(
+                'can-scroll-right',
+                scroller.scrollLeft < maxScroll - 1
+            );
+        }
+
+        scroller.addEventListener('scroll', updateScrollHints);
+        window.addEventListener('resize', updateScrollHints);
+        updateScrollHints();
     });
 
     $(function () {
@@ -69,6 +143,9 @@
 
             $('.content-section').hide(); // hide all sections
             $.each(targets, function (i, sel) { $(sel).show(); });
+
+            $('.nav li').removeClass('current-section');
+            $(this).parent().toggleClass('current-section');
 
             // Close any open dropdown menus after selection
             $('.dropdown-menu').hide();
@@ -144,36 +221,27 @@
         }
 
         /* Thin, subtle scrollbars for mobile menu (WebKit + Firefox) */
-        .nav.open {
-            scrollbar-width: thin;
-            /* Firefox */
-            scrollbar-color: rgba(255, 255, 255, 0.28) rgba(255, 255, 255, 0.04);
-        }
-
-        .nav.open::-webkit-scrollbar {
+        ::-webkit-scrollbar {
             width: 8px;
             height: 8px;
         }
 
-        .nav.open::-webkit-scrollbar-track {
+        ::-webkit-scrollbar-track {
             background: rgba(255, 255, 255, 0.03);
             border-radius: 8px;
         }
 
-        .nav.open::-webkit-scrollbar-thumb {
+        ::-webkit-scrollbar-thumb {
             background: rgba(255, 255, 255, 0.28);
             border-radius: 8px;
         }
 
-        .nav.open::-webkit-scrollbar-thumb:hover {
+        ::-webkit-scrollbar-thumb:hover {
             background: rgba(255, 255, 255, 0.4);
         }
 
         /* Also style dropdown scrollbars if they ever overflow */
         .dropdown-menu {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 0, 0, 0.25) rgba(0, 0, 0, 0.03);
-
             position: absolute;
             box-shadow: none;
             border-radius: 0;
@@ -182,21 +250,6 @@
             position: absolute !important;
             box-shadow: none !important;
             border-radius: 0 !important;
-        }
-
-        .dropdown-menu::-webkit-scrollbar {
-            width: 8px;
-            height: 8px;
-        }
-
-        .dropdown-menu::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.02);
-            border-radius: 8px;
-        }
-
-        .dropdown-menu::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.18);
-            border-radius: 8px;
         }
 
         .dropdown-menu a {
@@ -231,46 +284,90 @@
         display: flex;
         align-items: center;
         position: sticky;
-        /* make navbar stick to top */
         top: 0;
         z-index: 300;
+        align-content: center;
+        flex-wrap: wrap;
+        flex-direction: row;
+        justify-content: space-between;
+    }
+
+    .nav-left {
+        max-width: 20%;
     }
 
     .app-name {
         color: white;
         font-weight: 700;
-        margin: 0 10px;
+        margin: auto;
 
         /* Collapse long username with ellipsis */
-        max-width: 10ch;
+        max-width: 100%;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-        display: inline-block;
         vertical-align: middle;
-        flex-shrink: 0;
-        /* prevent shrinking below max-width */
+
+        padding: 8px 10px;
+        border-radius: 4px;
     }
 
-    .username {
-        color: white;
-        font-weight: 700;
-        margin-left: auto;
+    .nav-center {
+        max-width: 60%;
+    }
 
-        /* Collapse long username with ellipsis */
-        max-width: 20ch;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-        display: inline-block;
-        vertical-align: middle;
+    .scroll-wrap {
+        position: relative;
+    }
+
+    .scroll-wrap::before,
+    .scroll-wrap::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        width: 32px;
+        height: 100%;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity .2s;
+    }
+
+    .scroll-wrap::before {
+        z-index: 1;
+        left: 0;
+        background: linear-gradient(to right, dodgerblue, transparent);
+    }
+
+    .scroll-wrap::after {
+        right: 0;
+        background: linear-gradient(to left, dodgerblue, transparent);
+    }
+
+    /* toggled by JS */
+    .scroll-wrap.can-scroll-left::before {
+        opacity: 1;
+    }
+
+    .scroll-wrap.can-scroll-right::after {
+        opacity: 1;
+    }
+
+    ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background: rgba(0, 0, 0, 0.02);
+        border-radius: 8px;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: rgba(0, 0, 0, 0.18);
+        border-radius: 8px;
     }
 
     .nav {
-        scrollbar-width: thin;
-        /* Firefox */
-        scrollbar-color: rgba(255, 255, 255, 0.24) rgba(255, 255, 255, 0.04);
-
         list-style: none;
         margin: 0;
         padding: 0;
@@ -279,30 +376,19 @@
         flex: 1 1 auto;
         /* allow nav to take available space between app-name and username */
         min-width: 0;
-        /* prevent items from overflowing/overlapping by allowing horizontal scroll */
-        -webkit-overflow-scrolling: touch;
-    }
-
-    .nav::-webkit-scrollbar {
-        height: 8px;
-    }
-
-    .nav::-webkit-scrollbar-track {
-        background: rgba(255, 255, 255, 0.03);
-        border-radius: 8px;
-    }
-
-    .nav::-webkit-scrollbar-thumb {
-        background: rgba(255, 255, 255, 0.22);
-        border-radius: 8px;
-    }
-
-    .nav::-webkit-scrollbar-thumb:hover {
-        background: rgba(255, 255, 255, 0.36);
+        max-width: 100%;
+        flex-wrap: nowrap;
+        overflow-y: auto;
     }
 
     .nav li {
+        display: flex;
         position: relative;
+    }
+
+    .nav li.current-section {
+        background: rgba(55, 55, 55, 0.103);
+        border-radius: 4px;
     }
 
     .nav a {
@@ -352,6 +438,23 @@
         background: rgba(0, 0, 0, 0.04);
     }
 
+    .nav-right {
+        max-width: 20%;
+    }
+
+    .username {
+        color: white;
+        font-weight: 700;
+        margin-left: auto;
+
+        /* Collapse long username with ellipsis */
+        max-width: 100%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        vertical-align: middle;
+    }
+
     /* Content sections for show/hide demo */
     .container {
         padding: 16px;
@@ -378,7 +481,6 @@
         background: rgba(255, 255, 255, 0.08);
         color: white;
         text-decoration: none;
-        display: inline-block;
         white-space: nowrap;
     }
 </style>
